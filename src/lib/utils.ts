@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function prompter(ingredients: string, preference?: string) {
+export function prompter(ingredients: string) {
   const baseContent = `Eu tenho esses ingredientes: ${ingredients}.`;
 
   const baseJson = {
@@ -16,16 +16,14 @@ export function prompter(ingredients: string, preference?: string) {
     preparation_time: "string",
   };
 
-  const userContent = preference
-    ? `${baseContent} Eu quero fazer algo ${preference}. Por favor, sugira uma receita, em Portuguese, com a seguinte estrutura em formato objeto JSON puro, sem delimitadores de código: ${JSON.stringify(baseJson)}`
-    : `${baseContent} Por favor, sugira uma receita, em Portuguese, com a seguinte estrutura em formato objeto JSON puro, sem delimitadores de código: ${JSON.stringify(baseJson)}`;
+  const userContent = `${baseContent} Por favor, sugira uma receita, em português, com a seguinte estrutura em formato objeto JSON puro, sem delimitadores de código: ${JSON.stringify(baseJson)}`;
 
   return {
     messages: [
       {
         role: "system",
         content:
-          "Você é um especialista culinário com amplo conhecimento de receitas práticas. Você fornece sugestões com base nos ingredientes disponíveis e nas preferências do usuário, focando em soluções simples e deliciosas.",
+          "Você é um especialista culinário com amplo conhecimento de receitas práticas. Você fornece sugestões com base nos ingredientes disponíveis, focando em soluções simples e deliciosas.",
       },
       {
         role: "user",
@@ -38,7 +36,7 @@ export function prompter(ingredients: string, preference?: string) {
 export function parseJsonResponse(ingredients: string) {
   let jsonString = ingredients;
 
-  // Sometimes the IA returns that kind 
+  // Sometimes the IA returns that kind
   if (ingredients.startsWith("```json\n")) {
     jsonString = ingredients.replace(/^```json\n/, "").replace(/\n```$/, "");
   }

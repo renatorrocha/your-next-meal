@@ -1,8 +1,4 @@
-import { useState } from "react";
-import { api } from "./services/api";
-import { Recipe } from "./types/recipe";
 import RecipeComponent from "./components/recipe-component";
-import { parseJsonResponse, prompter } from "./lib/utils";
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
 import { useForm } from "react-hook-form";
@@ -12,30 +8,29 @@ import {
   InputIngredientsSchema,
 } from "./services/recipe.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { generateRecipe } from "./services/generate-recipe";
+import { useMutation } from "react-query";
+import { Loader2 } from "lucide-react";
 
 export default function App() {
-  const [recipe, setRecipe] = useState<Recipe | null>();
+  const {
+    data,
+    mutateAsync: server_generateRecipe,
+    isLoading,
+  } = useMutation({
+    mutationFn: generateRecipe,
+  });
+
   const form = useForm<InputIngredientsSchema>({
     resolver: zodResolver(InputIngredients),
   });
 
   const onSubmit = async (data: InputIngredientsSchema) => {
-    const teste = prompter(data.ingredients);
-    setRecipe(null);
-
-    await api
-      .post("/chat/completions", teste)
-      .then((response) => {
-        const parsedContent = parseJsonResponse(
-          response.data.choices[0].message.content,
-        );
-        setRecipe(parsedContent);
-      })
-      .catch((err) => console.error(err));
+    server_generateRecipe(data.ingredients);
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-zinc-100">
+    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-zinc-50">
       <div className="flex flex-col gap-4">
         <Form {...form}>
           <form
@@ -54,7 +49,12 @@ export default function App() {
           </form>
         </Form>
 
-        {recipe && <RecipeComponent recipe={recipe} />}
+        {isLoading && (
+          <article className="flex h-[320px] max-w-[620px] flex-col items-center justify-center gap-4 rounded-md border bg-white p-4 shadow-md">
+            <Loader2 className="animate-spin" />
+          </article>
+        )}
+        {data && <RecipeComponent recipe={data} />}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import RecipeComponent from "./components/recipe-component";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
 import { useForm } from "react-hook-form";
@@ -32,39 +32,54 @@ export default function App() {
 
   return (
     <motion.div
-      initial={{ opacity: 0.0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{
-        delay: 0.5,
-        duration: 1,
         ease: "easeInOut",
+        duration: 1,
       }}
-      className="flex min-h-screen w-full flex-col items-center justify-center"
+      className="flex min-h-screen w-full flex-col items-center justify-center "
     >
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 ">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex items-center gap-4"
+            className="flex w-[620px] items-center gap-4 "
           >
             <Input
-              className="min-w-[320px] resize-none p-2 text-center placeholder:text-center "
+              className="resize-none p-2 text-center placeholder:text-center"
               placeholder="Insira seus ingredientes disponíveis"
               {...form.register("ingredients")}
             />
 
-            <Button variant={"outline"} type="submit">
-              Generate
+            <Button variant={"outline"} type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <Loader2 className="size-4 animate-spin" /> Generating
+                </div>
+              ) : (
+                "Generate"
+              )}
             </Button>
           </form>
         </Form>
 
-        {isLoading && (
-          <article className="flex h-[320px] max-w-[620px] flex-col items-center justify-center gap-4 rounded-md border bg-white p-4 shadow-md">
-            <Loader2 className="animate-spin" />
-          </article>
-        )}
-        {data && <RecipeComponent recipe={data} />}
+        <AnimatePresence>
+          {data && (
+            <motion.div
+              initial={{ opacity: 0.0, y: -40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0.0, y: -40 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeInOut",
+              }}
+              className="flex flex-col items-center justify-center"
+            >
+              <RecipeComponent recipe={data} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );

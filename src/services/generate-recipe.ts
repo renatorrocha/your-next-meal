@@ -14,7 +14,7 @@ export const generateRecipe = async (ingredients: string) => {
 
     return parsedContent;
   } catch (err) {
-    console.error(err);
+    console.error("teste", err);
     throw err;
   }
 };

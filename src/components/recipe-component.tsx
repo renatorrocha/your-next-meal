@@ -12,7 +12,7 @@ export default function RecipeComponent({ recipe }: { recipe: Recipe }) {
   } = recipe;
 
   return (
-    <article className="flex max-w-[620px] flex-col gap-4 rounded-md border bg-white p-4 shadow-md">
+    <article className="flex w-[620px] flex-col gap-4 rounded-md border bg-white p-4 shadow-md">
       <header className="flex items-center justify-between">
         <p className="max-w-full truncate text-pretty text-xl font-bold sm:max-w-[300px]">
           {recipe_name}
@@ -32,7 +32,7 @@ export default function RecipeComponent({ recipe }: { recipe: Recipe }) {
         ))}
       </ul>
 
-      <div className="flex flex-col gap-1 whitespace-pre-line text-pretty">
+      <div className="flex flex-col gap-1 whitespace-pre-line text-pretty leading-relaxed">
         {instructions.map((instruction, index) => (
           <p key={index}>{instruction}</p>
         ))}

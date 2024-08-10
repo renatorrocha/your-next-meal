@@ -18,9 +18,8 @@ export default function RecipeComponent({ recipe }: { recipe: Recipe }) {
           {recipe_name}
         </p>
 
-        <div className="flex items-center gap-4">
+        <div className="mt-2 flex items-center gap-4 sm:mt-0">
           <TimestampComponent Icon={Hourglass} label={cooking_time} />
-
           <TimestampComponent Icon={Clock} label={preparation_time} />
         </div>
       </header>
@@ -34,8 +33,8 @@ export default function RecipeComponent({ recipe }: { recipe: Recipe }) {
       </ul>
 
       <div className="flex flex-col gap-1 whitespace-pre-line text-pretty">
-        {instructions.map((instruction) => (
-          <p>{instruction}</p>
+        {instructions.map((instruction, index) => (
+          <p key={index}>{instruction}</p>
         ))}
       </div>
     </article>

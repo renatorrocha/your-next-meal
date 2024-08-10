@@ -3,6 +3,8 @@ import { api } from "./services/api";
 import { Recipe } from "./types/recipe";
 import RecipeComponent from "./components/recipe-component";
 import { prompter } from "./lib/utils";
+import { Button } from "./components/ui/button";
+import { Input } from './components/ui/input';
 
 export default function App() {
   const [ingredients, setIngredients] = useState<string>("");
@@ -24,17 +26,23 @@ export default function App() {
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center bg-zinc-100">
-      <div onClick={() => console.log(recipe)}>
-        <input
-          value={ingredients}
-          onChange={(e) => setIngredients(e.target.value)}
-        />
+    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-zinc-100">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-4">
+          <Input
+            className="min-w-[320px] resize-none p-2 text-start placeholder:text-center"
+            placeholder="Insira seus ingredientes disponíveis"
+            value={ingredients}
+            onChange={(e) => setIngredients(e.target.value)}
+          />
 
-        <button onClick={handleClick}>Prompt</button>
+          <Button variant={"outline"} onClick={handleClick}>
+            Generate
+          </Button>
+        </div>
+
+        {recipe && <RecipeComponent recipe={recipe} />}
       </div>
-
-      {recipe && <RecipeComponent recipe={recipe} />}
     </div>
   );
 }

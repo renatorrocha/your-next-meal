@@ -34,3 +34,14 @@ export function prompter(ingredients: string, preference?: string) {
     ],
   };
 }
+
+export function parseJsonResponse(ingredients: string) {
+  let jsonString = ingredients;
+
+  // Sometimes the IA returns that kind 
+  if (ingredients.startsWith("```json\n")) {
+    jsonString = ingredients.replace(/^```json\n/, "").replace(/\n```$/, "");
+  }
+
+  return JSON.parse(jsonString);
+}

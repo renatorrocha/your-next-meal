@@ -1,4 +1,5 @@
 import RecipeComponent from "./components/recipe-component";
+import { motion } from "framer-motion";
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
 import { useForm } from "react-hook-form";
@@ -30,7 +31,16 @@ export default function App() {
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-zinc-50">
+    <motion.div
+      initial={{ opacity: 0.0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{
+        delay: 0.5,
+        duration: 1,
+        ease: "easeInOut",
+      }}
+      className="flex min-h-screen w-full flex-col items-center justify-center"
+    >
       <div className="flex flex-col gap-4">
         <Form {...form}>
           <form
@@ -38,7 +48,7 @@ export default function App() {
             className="flex items-center gap-4"
           >
             <Input
-              className="min-w-[320px] resize-none p-2 text-start placeholder:text-center"
+              className="min-w-[320px] resize-none p-2 text-center placeholder:text-center "
               placeholder="Insira seus ingredientes disponíveis"
               {...form.register("ingredients")}
             />
@@ -56,6 +66,6 @@ export default function App() {
         )}
         {data && <RecipeComponent recipe={data} />}
       </div>
-    </div>
+    </motion.div>
   );
 }
